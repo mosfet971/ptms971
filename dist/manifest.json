@@ -3,17 +3,17 @@
   "name": "ptms971",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "/ptms971/icon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icon.png",
+      "src": "/ptms971/icon.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "start_url": "/ptms971/",
   "background_color": "#FFFFFF",
   "display": "standalone",
   "theme_color": "#FFFFFF"

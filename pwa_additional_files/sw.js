@@ -1,9 +1,9 @@
 const dataCacheName = 'ptms971-datacache';
 const cacheName = 'ptms971-cache';
 const filesToCache = [
-  '/',
-  '/index.html',
-  '/icon.png',
+  '/ptms971/',
+  '/ptms971/index.html',
+  '/ptms971/icon.png',
 ];
 
 //install the sw
