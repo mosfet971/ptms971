@@ -42,7 +42,7 @@ const renderedTasks = computed(()=>{
 <template>
   <hr />
   <div class="container-fluid row mt-3">
-    <p style="color: grey; padding: 0; margin: 0;" v-if="JSON.stringify(renderedTasks) == '[]'">Сейчас задач нет</p>
+    <p style="color: grey; padding: 0; margin: 0;" v-if="JSON.stringify(renderedTasks) == '[]'">Сейчас запланированных задач нет</p>
     <PlanedTaskCard v-for="i in renderedTasks" v-bind:key="i.id" class="col-md-8 mt-3" v-bind:is-everyday="i.isEveryday" v-bind:id="i.id" v-bind:text="i.text" v-bind:dateText="i.dateText"/>
   </div>
 
