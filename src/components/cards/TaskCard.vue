@@ -1,5 +1,6 @@
 <script setup>
 import { inject } from 'vue';
+import PlanTaskModalButton from "../modalWindows/PlanTaskModalButton.vue";
 
 let props = defineProps({
   id: String,
@@ -15,12 +16,9 @@ const dataMethods = inject("dataMethods");
 <div class="card px-3">
   <div class="card-header px-0 mt-2 taskText" v-html="props.text"></div>
   <div class="card-body gap-1 row">
-    <button v-if="!props.isEveryday" class="taskBtn btn btn-success position-relative col-4" v-on:click="dataMethods.delTask(props.id)">Готово</button>
-    <button v-if="props.isEveryday" class="taskBtn btn btn-success position-relative col-4" v-on:click="dataMethods.everydayTaskCompleted(props.id)">Готово</button>
+    <PlanTaskModalButton class="taskBtn btn btn-success position-relative col-4" v-bind:id-of-task="props.id">Запланировать</PlanTaskModalButton>
     <button class="taskBtn btn btn-secondary position-relative col-4" v-on:click="dataMethods.delTask(props.id)">Удалить</button>
   </div>
-  <p v-if="!props.isEveryday" class="p-1 status-text status-text-red">Временная</p>
-  <p v-if="props.isEveryday" class="p-1 status-text status-text-green">Ежедневная</p>
 </div>
 </template>
 

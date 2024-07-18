@@ -3,6 +3,7 @@ import TasksView from "../views/TasksView.vue";
 import NotesView from "../views/NotesView.vue";
 import OtherView from '../views/OtherView.vue';
 import JsonView from "../views/JsonView.vue";
+import PlanedView from "../views/PlanedView.vue";
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -11,6 +12,11 @@ const router = createRouter({
       path: '/',
       name: "Задачи",
       component: TasksView
+    },
+    {
+      path: '/planed',
+      name: "Планы",
+      component: PlanedView
     },
     {
       path: '/notes',

@@ -4,7 +4,8 @@ import { computed, ref, provide, watchEffect, onMounted } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import CreateTaskModal from './components/modalWindows/CreateTaskModal.vue';
 import CreateNoteModal from './components/modalWindows/CreateNoteModal.vue';
-import ImportJsonModal from './components/modalWindows/ImportJsonModal.vue'
+import ImportJsonModal from './components/modalWindows/ImportJsonModal.vue';
+import PlanTaskModal from './components/modalWindows/PlanTaskModal.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -32,7 +33,8 @@ if (localStorage.getItem("dataObject")) {
   dataObject = ref({
     tasks: [],
     notes: [],
-    scripts: []
+    scripts: [],
+    IdOfTaskForPlan: ""
   });
 }
 
@@ -43,7 +45,7 @@ watchEffect(() => {
 
 let dataMethods = {
   newTask: (text, isEveryday) => {
-    dataObject.value.tasks.unshift({ id: crypto.randomUUID(), text: text, isEveryday: isEveryday, lastTime: 0 });
+    dataObject.value.tasks.unshift({ id: crypto.randomUUID(), text: text, isEveryday: isEveryday, lastTime: 0, isPlaned: isEveryday, dateText: "" });
   },
   delTask: (id) => {
     let newTasks = [];
@@ -114,6 +116,36 @@ let dataMethods = {
       notes: [],
       scripts: []
     };
+  },
+  planTask: (taskId, dateText) => {
+    let newTasks = [];
+    let newTask;
+    for (let i of dataObject.value.tasks) {
+      if (i.id == taskId) {
+        newTask = JSON.parse(JSON.stringify(i));
+        newTask.isPlaned = true;
+        newTask.dateText = dateText;
+        newTasks.push(newTask);
+        continue;
+      }
+      newTasks.push(i);
+    }
+    dataObject.value.tasks = newTasks;
+  },
+  unplanTask: (taskId) => {
+    let newTasks = [];
+    let newTask;
+    for (let i of dataObject.value.tasks) {
+      if (i.id == taskId) {
+        newTask = JSON.parse(JSON.stringify(i));
+        newTask.isPlaned = false;
+        newTask.dateText = "";
+        newTasks.push(newTask);
+        continue;
+      }
+      newTasks.push(i);
+    }
+    dataObject.value.tasks = newTasks;
   }
 };
 
@@ -138,6 +170,7 @@ provide("dataMethods", dataMethods);
   <CreateTaskModal />
   <CreateNoteModal />
   <ImportJsonModal />
+  <PlanTaskModal />
 </template>
 
 <style scoped></style>
