@@ -2,10 +2,11 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { computed, ref, provide, watchEffect, onMounted } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import CreateTaskModal from './components/modalWindows/CreateTaskModal.vue';
 import CreateNoteModal from './components/modalWindows/CreateNoteModal.vue';
 import ImportJsonModal from './components/modalWindows/ImportJsonModal.vue';
-import PlanTaskModal from './components/modalWindows/PlanTaskModal.vue';
+import CreateProjectModal from './components/modalWindows/CreateProjectModal.vue';
+import EditStrategyModal from './components/modalWindows/EditStrategyModal.vue';
+import EditScheduleModal from './components/modalWindows/EditScheduleModal.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -18,6 +19,8 @@ const notHiddenRoutes = computed(() => routes.filter((v) => v.name !== ""));
 onMounted(() => {
   if (localStorage.getItem("lastPath")) {
     router.push(localStorage.getItem("lastPath"));
+  } else {
+    router.push("/strategy");
   }
 });
 
@@ -29,12 +32,23 @@ let dataObject;
 
 if (localStorage.getItem("dataObject")) {
   dataObject = ref(JSON.parse(localStorage.getItem("dataObject")));
+  for (const i of ["tasks", "notes", "scripts", "strategyText", "projects", "scheduleText"]) {
+    if (!dataObject.value[i]) {
+      if(i=="strategyText" || i=="scheduleText") {
+        dataObject.value[i] = "";
+      } else {
+        dataObject.value[i] = [];
+      }
+    }
+  }
 } else {
   dataObject = ref({
     tasks: [],
     notes: [],
     scripts: [],
-    IdOfTaskForPlan: ""
+    strategyText: "",
+    projects: [],
+    scheduleText: ""
   });
 }
 
@@ -44,45 +58,6 @@ watchEffect(() => {
 
 
 let dataMethods = {
-  newTask: (text, isEveryday) => {
-    dataObject.value.tasks.unshift({ id: crypto.randomUUID(), text: text, isEveryday: isEveryday, lastTime: 0, isPlaned: isEveryday, dateText: "" });
-  },
-  delTask: (id) => {
-    let newTasks = [];
-    for (let i of dataObject.value.tasks) {
-      if (i.id == id) continue;
-      newTasks.push(i);
-    }
-    dataObject.value.tasks = newTasks;
-  },
-  everydayTaskCompleted: (id) => {
-    let newTasks = [];
-    let newTask;
-    for (let i of dataObject.value.tasks) {
-      if (i.id == id) {
-        newTask = JSON.parse(JSON.stringify(i));
-        newTask.lastTime = Math.floor((((((Date.now()/1000)/60)-(new Date()).getTimezoneOffset()-300)/60)/24));
-        newTasks.push(newTask);
-        continue;
-      }
-      newTasks.push(i);
-    }
-    dataObject.value.tasks = newTasks;
-  },
-  toggleTask: (id) => {
-    let newTasks = [];
-    let newTask;
-    for (let i of dataObject.value.tasks) {
-      if (i.id == id) {
-        newTask = JSON.parse(JSON.stringify(i));
-        continue;
-      }
-      newTasks.push(i);
-    }
-    newTask.isFast = !newTask.isFast;
-    newTasks.unshift(newTask);
-    dataObject.value.tasks = newTasks;
-  },
   newNote: (text) => {
     dataObject.value.notes.unshift({ id: crypto.randomUUID(), text: text });
   },
@@ -107,6 +82,40 @@ let dataMethods = {
     dataObject.value.notes = newNotes;
     dataObject.value.notes.unshift(newNote);
   },
+
+  newProject: (text) => {
+    dataObject.value.projects.unshift({ id: crypto.randomUUID(), text: text });
+  },
+  delProject: (id) => {
+    let newProjects = [];
+    for (let i of dataObject.value.projects) {
+      if (i.id == id) continue;
+      newProjects.push(i);
+    }
+    dataObject.value.projects = newProjects;
+  },
+  bumpProject: (id) => {
+    let newProject;
+    for (let i of dataObject.value.projects) {
+      if (i.id == id) newProject = JSON.parse(JSON.stringify(i));
+    }
+    let newProjects = [];
+    for (let i of dataObject.value.projects) {
+      if (i.id == id) continue;
+      newProjects.push(i);
+    }
+    dataObject.value.projects = newProjects;
+    dataObject.value.projects.unshift(newProject);
+  },
+
+  setStrategyText: (text) => {
+    dataObject.value.strategyText = text;
+  },
+
+  setScheduleText: (text) => {
+    dataObject.value.scheduleText = text;
+  },
+
   setDataObject: (obj) => {
     dataObject.value = JSON.parse(JSON.stringify(obj));
   },
@@ -114,38 +123,11 @@ let dataMethods = {
     dataObject.value = {
       tasks: [],
       notes: [],
-      scripts: []
+      scripts: [],
+      strategyText: "",
+      projects: [],
+      scheduleText: ""
     };
-  },
-  planTask: (taskId, dateText) => {
-    let newTasks = [];
-    let newTask;
-    for (let i of dataObject.value.tasks) {
-      if (i.id == taskId) {
-        newTask = JSON.parse(JSON.stringify(i));
-        newTask.isPlaned = true;
-        newTask.dateText = dateText;
-        newTasks.push(newTask);
-        continue;
-      }
-      newTasks.push(i);
-    }
-    dataObject.value.tasks = newTasks;
-  },
-  unplanTask: (taskId) => {
-    let newTasks = [];
-    let newTask;
-    for (let i of dataObject.value.tasks) {
-      if (i.id == taskId) {
-        newTask = JSON.parse(JSON.stringify(i));
-        newTask.isPlaned = false;
-        newTask.dateText = "";
-        newTasks.push(newTask);
-        continue;
-      }
-      newTasks.push(i);
-    }
-    dataObject.value.tasks = newTasks;
   }
 };
 
@@ -167,10 +149,11 @@ provide("dataMethods", dataMethods);
     </div>
   </div>
 
-  <CreateTaskModal />
   <CreateNoteModal />
   <ImportJsonModal />
-  <PlanTaskModal />
+  <CreateProjectModal/>
+  <EditStrategyModal/>
+  <EditScheduleModal/>
 </template>
 
 <style scoped></style>

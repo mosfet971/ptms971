@@ -1,22 +1,28 @@
 import { createRouter, createMemoryHistory } from 'vue-router'
-import TasksView from "../views/TasksView.vue";
 import NotesView from "../views/NotesView.vue";
 import OtherView from '../views/OtherView.vue';
 import JsonView from "../views/JsonView.vue";
-import PlanedView from "../views/PlanedView.vue";
+import ProjectsView from '../views/ProjectsView.vue';
+import StrategyView from '../views/StrategyView.vue';
+import ScheduleView from '../views/ScheduleView.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [
     {
-      path: '/',
-      name: "Задачи",
-      component: TasksView
+      path: '/strategy',
+      name: "СНР", // Стратегические направления работы
+      component: StrategyView
     },
     {
-      path: '/planed',
-      name: "Планы",
-      component: PlanedView
+      path: '/projects',
+      name: "ПП", // Планы проектов
+      component: ProjectsView
+    },
+    {
+      path: '/schedule',
+      name: "РНБВ", // Расписание на ближайшее время
+      component: ScheduleView
     },
     {
       path: '/notes',
