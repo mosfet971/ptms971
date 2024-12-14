@@ -1,32 +1,68 @@
 <script setup>
-import { inject, computed } from 'vue';
+import { inject, computed, ref } from 'vue';
 import CreateNoteModalButton from "../components/modalWindows/CreateNoteModalButton.vue";
 import NoteCard from "../components/cards/NoteCard.vue";
 import markdownit from 'markdown-it'
-const md = markdownit()
+import MiniSearch from 'minisearch';
+const md = markdownit();
 
 const dataObject = inject("dataObject");
 
-const renderedNotes = computed(()=>{
+const searchInputValue = ref("");
+
+const renderedNotes = computed(() => {
+
+  let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes));
   let notes = [];
+
+  if (searchInputValue.value !== "") {
+
+    let miniSearch = new MiniSearch({
+      fields: ["text"],
+      storeFields: ["id", "text"],
+      searchOptions: {
+        prefix: true
+      }
+    })
+
+    miniSearch.addAll(inpNotes);
+
+    let searchResults = miniSearch.search(searchInputValue.value);
+    //console.log(searchResults, searchInputValue.value);
+    notes = searchResults;
+
+  } else {
+    notes = inpNotes;
+  }
+
   let newNote = {};
-  for (let i of dataObject.value.notes) {
+  let outNotes = [];
+
+  for (let i of notes) {
     newNote = JSON.parse(JSON.stringify(i));
     newNote.text = md.render(i.text);
-    notes.push(newNote);
+    outNotes.push(newNote);
   }
-  return notes;
+
+  return outNotes;
 });
 
 </script>
 
 <template>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="addon">🔍︎</span>
+    <input v-model="searchInputValue" type="text" class="form-control" placeholder="Запрос для поиска" aria-describedby="addon">
+  </div>
+
+  <hr />
   <CreateNoteModalButton class="mb-3">Добавить</CreateNoteModalButton>
-  <hr/>
+  <hr />
 
   <div class="container-fluid mt-3 row">
     <p style="color: grey; padding: 0; margin: 0;" v-if="JSON.stringify(renderedNotes) == '[]'">Пусто</p>
-    <NoteCard v-for="i in renderedNotes" v-bind:key="i.id" class="col-md-8 mt-3" v-bind:id="i.id" v-bind:text="i.text" />
+    <NoteCard v-for="i in renderedNotes" v-bind:key="i.id" class="col-md-8 mt-3" v-bind:id="i.id"
+      v-bind:text="i.text" />
   </div>
 
   <span class="m-3"></span>

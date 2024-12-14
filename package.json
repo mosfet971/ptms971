@@ -13,6 +13,7 @@
     "bootstrap": "^5.3.3",
     "copyfiles": "^2.4.1",
     "markdown-it": "^14.0.0",
+    "minisearch": "^7.1.1",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },
