@@ -51,7 +51,7 @@ const renderedNotes = computed(() => {
 
 <template>
   <div class="input-group mb-3">
-    <span class="input-group-text" id="addon">🔍︎</span>
+    <span class="input-group-text" style="user-select: none;" id="addon">🔍︎</span>
     <input v-model="searchInputValue" type="text" class="form-control" placeholder="Запрос для поиска" aria-describedby="addon">
   </div>
 
