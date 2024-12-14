@@ -2,30 +2,30 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import NotesView from "../views/NotesView.vue";
 import OtherView from '../views/OtherView.vue';
 import JsonView from "../views/JsonView.vue";
-import ProjectsView from '../views/ProjectsView.vue';
-import StrategyView from '../views/StrategyView.vue';
-import ScheduleView from '../views/ScheduleView.vue';
+import TacticalLevelTasksView from '../views/TacticalLevelTasksView.vue';
+import ExecutiveLevelTasksView from '../views/ExecutiveLevelTasksView.vue';
+import StrategicLevelTasksView from '../views/StrategicLevelTasksView.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [
     {
-      path: '/strategy',
-      name: "СНР", // Стратегические направления работы
-      component: StrategyView
+      path: '/1',
+      name: "ЗСУ", // Задачи стратегического уровня
+      component: StrategicLevelTasksView
     },
     {
-      path: '/projects',
-      name: "ПП", // Планы проектов
-      component: ProjectsView
+      path: '/2',
+      name: "ЗТУ", // Задачи тактического уровня
+      component: TacticalLevelTasksView
     },
     {
-      path: '/schedule',
-      name: "РНБВ", // Расписание на ближайшее время
-      component: ScheduleView
+      path: '/3',
+      name: "ЗИУ", // Задачи исполнительного уровня
+      component: ExecutiveLevelTasksView
     },
     {
-      path: '/notes',
+      path: '/4',
       name: "Заметки",
       component: NotesView
     },

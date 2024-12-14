@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue';
-import EditScheduleModalButton from '../modalWindows/EditScheduleModalButton.vue';
+import EditTacticalLevelTasksTextModalButton from '../modalWindows/EditTacticalLevelTasksTextModalButton.vue';
 
 let props = defineProps({
   text: String
@@ -12,7 +12,7 @@ let props = defineProps({
 <div class="card px-3">
   <div class="card-header px-0 mt-2" v-html="props.text"></div>
   <div class="card-body gap-1 row">
-    <EditScheduleModalButton>Редактировать</EditScheduleModalButton>
+    <EditTacticalLevelTasksTextModalButton>Редактировать</EditTacticalLevelTasksTextModalButton>
   </div>
 </div>
 </template>

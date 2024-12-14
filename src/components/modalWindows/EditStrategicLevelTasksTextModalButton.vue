@@ -2,7 +2,7 @@
 import BsButtonForModal from "./BsButtonForModal.vue";
 </script>
 <template>
-    <BsButtonForModal target-modal-id="editStrategyModal">
+    <BsButtonForModal target-modal-id="EditStrategicLevelTasksTextModal">
         <slot/>
     </BsButtonForModal>
 </template>

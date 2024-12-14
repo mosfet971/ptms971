@@ -4,9 +4,9 @@ import { computed, ref, provide, watchEffect, onMounted } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import CreateNoteModal from './components/modalWindows/CreateNoteModal.vue';
 import ImportJsonModal from './components/modalWindows/ImportJsonModal.vue';
-import CreateProjectModal from './components/modalWindows/CreateProjectModal.vue';
-import EditStrategyModal from './components/modalWindows/EditStrategyModal.vue';
-import EditScheduleModal from './components/modalWindows/EditScheduleModal.vue';
+import EditStrategicLevelTasksTextModal from './components/modalWindows/EditStrategicLevelTasksTextModal.vue';
+import EditExecutiveLevelTasksTextModal from './components/modalWindows/EditExecutiveLevelTasksTextModal.vue';
+import EditTacticalLevelTasksTextModal from './components/modalWindows/EditTacticalLevelTasksTextModal.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -32,9 +32,9 @@ let dataObject;
 
 if (localStorage.getItem("dataObject")) {
   dataObject = ref(JSON.parse(localStorage.getItem("dataObject")));
-  for (const i of ["tasks", "notes", "scripts", "strategyText", "projects", "scheduleText"]) {
+  for (const i of ["tasks", "notes", "scripts", "strategyText", "projects", "scheduleText", "tacticalLevelTasksText", "executiveLevelTasksText", "strategicLevelTasksText"]) {
     if (!dataObject.value[i]) {
-      if(i=="strategyText" || i=="scheduleText") {
+      if(i=="strategyText" || i=="scheduleText" || i=="tacticalLevelTasksText" || i=="executiveLevelTasksText" || i=="strategicLevelTasksText") {
         dataObject.value[i] = "";
       } else {
         dataObject.value[i] = [];
@@ -48,7 +48,10 @@ if (localStorage.getItem("dataObject")) {
     scripts: [],
     strategyText: "",
     projects: [],
-    scheduleText: ""
+    scheduleText: "",
+    tacticalLevelTasksText: "",
+    executiveLevelTasksText: "",
+    strategicLevelTasksText: ""
   });
 }
 
@@ -83,37 +86,16 @@ let dataMethods = {
     dataObject.value.notes.unshift(newNote);
   },
 
-  newProject: (text) => {
-    dataObject.value.projects.unshift({ id: crypto.randomUUID(), text: text });
-  },
-  delProject: (id) => {
-    let newProjects = [];
-    for (let i of dataObject.value.projects) {
-      if (i.id == id) continue;
-      newProjects.push(i);
-    }
-    dataObject.value.projects = newProjects;
-  },
-  bumpProject: (id) => {
-    let newProject;
-    for (let i of dataObject.value.projects) {
-      if (i.id == id) newProject = JSON.parse(JSON.stringify(i));
-    }
-    let newProjects = [];
-    for (let i of dataObject.value.projects) {
-      if (i.id == id) continue;
-      newProjects.push(i);
-    }
-    dataObject.value.projects = newProjects;
-    dataObject.value.projects.unshift(newProject);
+  setTacticalLevelTasksText: (text) => {
+    dataObject.value.tacticalLevelTasksText = text;
   },
 
-  setStrategyText: (text) => {
-    dataObject.value.strategyText = text;
+  setStrategicLevelTasksText: (text) => {
+    dataObject.value.strategicLevelTasksText = text;
   },
 
-  setScheduleText: (text) => {
-    dataObject.value.scheduleText = text;
+  setExecutiveLevelTasksText: (text) => {
+    dataObject.value.executiveLevelTasksText = text;
   },
 
   setDataObject: (obj) => {
@@ -126,7 +108,10 @@ let dataMethods = {
       scripts: [],
       strategyText: "",
       projects: [],
-      scheduleText: ""
+      scheduleText: "",
+      tacticalLevelTasksText: "",
+      executiveLevelTasksText: "",
+      strategicLevelTasksText: ""
     };
   }
 };
@@ -151,9 +136,10 @@ provide("dataMethods", dataMethods);
 
   <CreateNoteModal />
   <ImportJsonModal />
-  <CreateProjectModal/>
-  <EditStrategyModal/>
-  <EditScheduleModal/>
+
+  <EditStrategicLevelTasksTextModal/>
+  <EditExecutiveLevelTasksTextModal/>
+  <EditTacticalLevelTasksTextModal/>
 </template>
 
 <style scoped></style>

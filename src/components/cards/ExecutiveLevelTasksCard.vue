@@ -1,12 +1,10 @@
 <script setup>
 import { inject } from 'vue';
+import EditExecutiveLevelTasksTextModalButton from '../modalWindows/EditExecutiveLevelTasksTextModalButton.vue';
 
 let props = defineProps({
-  id: String,
   text: String
 });
-
-const dataMethods = inject("dataMethods");
 
 </script>
 
@@ -14,8 +12,7 @@ const dataMethods = inject("dataMethods");
 <div class="card px-3">
   <div class="card-header px-0 mt-2" v-html="props.text"></div>
   <div class="card-body gap-1 row">
-    <button class="btnNoteCard btn btn-secondary position-relative col-4" v-on:click="dataMethods.bumpProject(props.id)">Поднять</button>
-    <button class="btnNoteCard btn btn-secondary position-relative col-4" v-on:click="dataMethods.delProject(props.id)">Удалить</button>
+    <EditExecutiveLevelTasksTextModalButton>Редактировать</EditExecutiveLevelTasksTextModalButton>
   </div>
 </div>
 </template>
