@@ -3,7 +3,8 @@ import { inject } from 'vue';
 
 let props = defineProps({
   id: String,
-  text: String
+  text: String,
+  rawText: String
 });
 
 const dataMethods = inject("dataMethods");
@@ -16,7 +17,7 @@ const dataMethods = inject("dataMethods");
   <div class="card-body gap-1 row">
     <button class="btnNoteCard btn btn-secondary position-relative col-4" v-on:click="dataMethods.bumpNote(props.id)">Поднять</button>
     <button class="btnNoteCard btn btn-secondary position-relative col-4" v-on:click="dataMethods.delNote(props.id)">Удалить</button>
-    <button class="btnNoteCard btn btn-secondary position-relative col-4" v-on:click="navigator.clipboard.writeText(props.rawText)"><span style="font-size: .875em; margin-right: .125em; position: relative; top: -.25em; left: -.125em">
+    <button class="btnNoteCard btn btn-secondary position-relative col-4" v-bind:onclick="'navigator.clipboard.writeText(`' + props.rawText + '`)'"><span style="font-size: .875em; margin-right: .125em; position: relative; top: -.25em; left: -.125em">
   📄<span style="position: absolute; top: .25em; left: .25em">📄</span>
 </span></button>
   </div>

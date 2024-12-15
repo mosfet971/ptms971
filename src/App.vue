@@ -65,6 +65,9 @@ let dataMethods = {
     dataObject.value.notes.unshift({ id: crypto.randomUUID(), text: text });
   },
   delNote: (id) => {
+    if(!confirm("Вы уверены, что хотите удалить заметку?")) {
+      return false;
+    }
     let newNotes = [];
     for (let i of dataObject.value.notes) {
       if (i.id == id) continue;
