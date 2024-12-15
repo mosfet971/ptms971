@@ -43,6 +43,7 @@ const renderedNotes = computed(() => {
   for (let i of notes) {
     newNote = JSON.parse(JSON.stringify(i));
     newNote.text = md.render(i.text);
+    newNote.rawText = i.text;
     outNotes.push(newNote);
   }
 
@@ -65,7 +66,7 @@ const renderedNotes = computed(() => {
   <div class="container-fluid mt-3 row">
     <p style="color: grey; padding: 0; margin: 0;" v-if="JSON.stringify(renderedNotes) == '[]'">Пусто</p>
     <NoteCard v-for="i in renderedNotes" v-bind:key="i.id" class="col-md-8 mt-3" v-bind:id="i.id"
-      v-bind:text="i.text" />
+      v-bind:text="i.text" v-bind:rawText="i.rawText"/>
   </div>
 
   <span class="m-3"></span>
