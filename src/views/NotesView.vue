@@ -10,24 +10,26 @@ const dataObject = inject("dataObject");
 
 const searchInputValue = ref("");
 
-const renderedNotes = computed(() => {
+const minisearchRef = computed(() => {
+  let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes));
+  let miniSearch = new MiniSearch({
+    fields: ["text"],
+    storeFields: ["id", "text"],
+    searchOptions: {
+      prefix: true
+    }
+  })
 
+  miniSearch.addAll(inpNotes);
+  return miniSearch;
+});
+
+const renderedNotes = computed(() => {
   let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes));
   let notes = [];
 
   if (searchInputValue.value !== "") {
-
-    let miniSearch = new MiniSearch({
-      fields: ["text"],
-      storeFields: ["id", "text"],
-      searchOptions: {
-        prefix: true
-      }
-    })
-
-    miniSearch.addAll(inpNotes);
-
-    let searchResults = miniSearch.search(searchInputValue.value);
+    let searchResults = minisearchRef.value.search(searchInputValue.value);
     //console.log(searchResults, searchInputValue.value);
     notes = searchResults;
 
@@ -52,7 +54,8 @@ const renderedNotes = computed(() => {
 <template>
   <div class="input-group mb-3">
     <span class="input-group-text" style="user-select: none;" id="addon">🔍︎</span>
-    <input v-model="searchInputValue" type="text" class="form-control" placeholder="Запрос для поиска" aria-describedby="addon">
+    <input v-model="searchInputValue" type="text" class="form-control" placeholder="Запрос для поиска"
+      aria-describedby="addon">
   </div>
 
   <hr />
