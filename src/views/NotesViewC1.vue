@@ -11,7 +11,7 @@ const dataObject = inject("dataObject");
 const searchInputValue = ref("");
 
 const minisearchRef = computed(() => {
-  let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes));
+  let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes1));
   let miniSearch = new MiniSearch({
     fields: ["text"],
     storeFields: ["id", "text"],
@@ -25,7 +25,7 @@ const minisearchRef = computed(() => {
 });
 
 const renderedNotes = computed(() => {
-  let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes));
+  let inpNotes = JSON.parse(JSON.stringify(dataObject.value.notes1));
   let notes = [];
 
   if (searchInputValue.value !== "") {
@@ -60,7 +60,7 @@ const renderedNotes = computed(() => {
   </div>
 
   <hr />
-  <CreateNoteModalButton class="mb-3">Добавить</CreateNoteModalButton>
+  <CreateNoteModalButton chanel-id="1" class="mb-3">Добавить</CreateNoteModalButton>
   <hr />
 
   <div class="container-fluid mt-3 row">

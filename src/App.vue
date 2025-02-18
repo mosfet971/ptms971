@@ -2,11 +2,14 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { computed, ref, provide, watchEffect, onMounted } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import CreateNoteModal from './components/modalWindows/CreateNoteModal.vue';
+
 import ImportJsonModal from './components/modalWindows/ImportJsonModal.vue';
-import EditStrategicLevelTasksTextModal from './components/modalWindows/EditStrategicLevelTasksTextModal.vue';
-import EditExecutiveLevelTasksTextModal from './components/modalWindows/EditExecutiveLevelTasksTextModal.vue';
-import EditTacticalLevelTasksTextModal from './components/modalWindows/EditTacticalLevelTasksTextModal.vue';
+
+import CreateNoteModal0 from './components/modalWindows/CreateNoteModal0.vue';
+import CreateNoteModal1 from './components/modalWindows/CreateNoteModal1.vue';
+import CreateNoteModal2 from './components/modalWindows/CreateNoteModal2.vue';
+import CreateNoteModal3 from './components/modalWindows/CreateNoteModal3.vue';
+import CreateNoteModal4 from './components/modalWindows/CreateNoteModal4.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -20,7 +23,7 @@ onMounted(() => {
   if (localStorage.getItem("lastPath")) {
     router.push(localStorage.getItem("lastPath"));
   } else {
-    router.push("/strategy");
+    router.push("/");
   }
 });
 
@@ -32,9 +35,9 @@ let dataObject;
 
 if (localStorage.getItem("dataObject")) {
   dataObject = ref(JSON.parse(localStorage.getItem("dataObject")));
-  for (const i of ["tasks", "notes", "scripts", "strategyText", "projects", "scheduleText", "tacticalLevelTasksText", "executiveLevelTasksText", "strategicLevelTasksText"]) {
+  for (const i of ["tasks", "notes", "scripts", "strategyText", "projects", "scheduleText", "tacticalLevelTasksText", "executiveLevelTasksText", "strategicLevelTasksText", "notes1", "notes2", "notes3", "notes4"]) {
     if (!dataObject.value[i]) {
-      if(i=="strategyText" || i=="scheduleText" || i=="tacticalLevelTasksText" || i=="executiveLevelTasksText" || i=="strategicLevelTasksText") {
+      if (i == "strategyText" || i == "scheduleText" || i == "tacticalLevelTasksText" || i == "executiveLevelTasksText" || i == "strategicLevelTasksText") {
         dataObject.value[i] = "";
       } else {
         dataObject.value[i] = [];
@@ -51,7 +54,11 @@ if (localStorage.getItem("dataObject")) {
     scheduleText: "",
     tacticalLevelTasksText: "",
     executiveLevelTasksText: "",
-    strategicLevelTasksText: ""
+    strategicLevelTasksText: "",
+    notes1: [],
+    notes2: [],
+    notes3: [],
+    notes4: []
   });
 }
 
@@ -61,32 +68,57 @@ watchEffect(() => {
 
 
 let dataMethods = {
-  newNote: (text) => {
-    dataObject.value.notes.unshift({ id: crypto.randomUUID(), text: text });
+  newNote: (chanelId, text) => {
+    let id_ = chanelId;
+    if (id_ === "0") {
+      id_ = "";
+    }
+    dataObject.value["notes" + id_].unshift({ id: crypto.randomUUID(), text: text });
   },
   delNote: (id) => {
-    if(!confirm("Вы уверены, что хотите удалить заметку?")) {
+    if (!confirm("Вы уверены, что хотите удалить заметку?")) {
       return false;
     }
     let newNotes = [];
-    for (let i of dataObject.value.notes) {
-      if (i.id == id) continue;
-      newNotes.push(i);
+    let lastFieldName = "";
+    for (const fieldName of ["notes", "notes1", "notes2", "notes3", "notes4"]) {
+      newNotes = [];
+      for (let i of dataObject.value[fieldName]) {
+        if (i.id == id) {
+          lastFieldName = fieldName;
+          continue;
+        }
+        newNotes.push(i);
+      }
+      if (lastFieldName !== "") {
+        break;
+      }
     }
-    dataObject.value.notes = newNotes;
+    dataObject.value[lastFieldName] = newNotes;
   },
   bumpNote: (id) => {
     let newNote;
-    for (let i of dataObject.value.notes) {
-      if (i.id == id) newNote = JSON.parse(JSON.stringify(i));
+    let newNotes;
+    let lastFieldName = "";
+    for (const fieldName of ["notes", "notes1", "notes2", "notes3", "notes4"]) {
+      newNote = {};
+      for (let i of dataObject.value[fieldName]) {
+        if (i.id == id) newNote = JSON.parse(JSON.stringify(i));
+      }
+      newNotes = [];
+      for (let i of dataObject.value[fieldName]) {
+        if (i.id == id) {
+          lastFieldName = fieldName;
+          continue;
+        }
+        newNotes.push(i);
+      }
+      if (lastFieldName !== "") {
+        break;
+      }
     }
-    let newNotes = [];
-    for (let i of dataObject.value.notes) {
-      if (i.id == id) continue;
-      newNotes.push(i);
-    }
-    dataObject.value.notes = newNotes;
-    dataObject.value.notes.unshift(newNote);
+    dataObject.value[lastFieldName] = newNotes;
+    dataObject.value[lastFieldName].unshift(newNote);
   },
 
   setTacticalLevelTasksText: (text) => {
@@ -105,6 +137,9 @@ let dataMethods = {
     dataObject.value = JSON.parse(JSON.stringify(obj));
   },
   clearDataObject: () => {
+    if (!confirm("Вы уверены, что хотите очистить хранилище?")) {
+      return false;
+    }
     dataObject.value = {
       tasks: [],
       notes: [],
@@ -114,7 +149,11 @@ let dataMethods = {
       scheduleText: "",
       tacticalLevelTasksText: "",
       executiveLevelTasksText: "",
-      strategicLevelTasksText: ""
+      strategicLevelTasksText: "",
+      notes1: [],
+      notes2: [],
+      notes3: [],
+      notes4: []
     };
   }
 };
@@ -137,12 +176,13 @@ provide("dataMethods", dataMethods);
     </div>
   </div>
 
-  <CreateNoteModal />
   <ImportJsonModal />
 
-  <EditStrategicLevelTasksTextModal/>
-  <EditExecutiveLevelTasksTextModal/>
-  <EditTacticalLevelTasksTextModal/>
+  <CreateNoteModal0 />
+  <CreateNoteModal1 />
+  <CreateNoteModal2 />
+  <CreateNoteModal3 />
+  <CreateNoteModal4 />
 </template>
 
 <style scoped></style>

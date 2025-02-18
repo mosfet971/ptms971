@@ -7,7 +7,7 @@ const dataMethods = inject("dataMethods");
 const text = ref("");
 
 const handlerYes = ()=> {
-    dataMethods.newNote(text.value);
+    dataMethods.newNote("4", text.value);
     text.value = "";
 };
 
@@ -18,7 +18,7 @@ const handlerNo = ()=> {
 </script>
 
 <template>
-<BsModal id="createNoteModal" label="Добавление заметки" type="Save" v-bind:yesHandler="handlerYes"  v-bind:noHandler="handlerNo">
+<BsModal id="createNoteModal4" label="Добавление заметки" type="Save" v-bind:yesHandler="handlerYes"  v-bind:noHandler="handlerNo">
   <div class="form-group">
     <textarea class="form-control mt-2" rows="5" placeholder="Текст заметки" v-model="text"></textarea>
   </div>

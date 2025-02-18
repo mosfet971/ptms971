@@ -1,36 +1,42 @@
 import { createRouter, createMemoryHistory } from 'vue-router'
-import NotesView from "../views/NotesView.vue";
 import OtherView from '../views/OtherView.vue';
 import JsonView from "../views/JsonView.vue";
-import TacticalLevelTasksView from '../views/TacticalLevelTasksView.vue';
-import ExecutiveLevelTasksView from '../views/ExecutiveLevelTasksView.vue';
-import StrategicLevelTasksView from '../views/StrategicLevelTasksView.vue';
+import NotesViewC4 from '../views/NotesViewC4.vue';
+import NotesViewC3 from '../views/NotesViewC3.vue';
+import NotesViewC2 from '../views/NotesViewC2.vue';
+import NotesViewC1 from '../views/NotesViewC1.vue';
+import NotesViewC0 from '../views/NotesViewC0.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [
     {
+      path: '/0',
+      name: "K4", 
+      component: NotesViewC4
+    },
+    {
       path: '/1',
-      name: "ЗСУ", // Задачи стратегического уровня
-      component: StrategicLevelTasksView
+      name: "K3", 
+      component: NotesViewC3
     },
     {
       path: '/2',
-      name: "ЗТУ", // Задачи тактического уровня
-      component: TacticalLevelTasksView
+      name: "K2", 
+      component: NotesViewC2
     },
     {
       path: '/3',
-      name: "ЗИУ", // Задачи исполнительного уровня
-      component: ExecutiveLevelTasksView
+      name: "К1",
+      component: NotesViewC1
     },
     {
       path: '/4',
-      name: "Заметки",
-      component: NotesView
+      name: "К0",
+      component: NotesViewC0
     },
     {
-      path: '/other',
+      path: '/',
       name: "Прочее",
       component: OtherView
     },
